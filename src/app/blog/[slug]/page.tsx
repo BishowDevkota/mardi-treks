@@ -215,32 +215,22 @@
 
 
 
-import { getPostBySlug, getPosts } from "@/lib/wordpress";
+import { getPostBySlug } from "@/lib/wordpress";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 
-// This makes the route dynamic but still SSG-friendly
+// Force runtime rendering (SSR/ISR)
 export const dynamic = "force-dynamic";
 
-// Generate static params (optional: remove if you don’t want pre-rendering)
-export async function generateStaticParams() {
-  try {
-    const posts = await getPosts();
-    return posts.map((post) => ({
-      slug: post.slug,
-    }));
-  } catch (error) {
-    console.error("Error generating static params:", error);
-    return [];
-  }
-}
-
 interface BlogPostPageProps {
-  params: { slug: string }; // ✅ just an object, no Promise
+  params: Promise<{ slug: string }>; // ✅ params is now a Promise
 }
 
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
-  const { slug } = params; // ✅ no await
+  // ✅ Await params before destructuring
+  const { slug } = await params;
+
+  // Fetch post at runtime
   const post = await getPostBySlug(slug);
 
   if (!post) {
@@ -273,3 +263,4 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     </section>
   );
 }
+

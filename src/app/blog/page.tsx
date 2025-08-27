@@ -2,25 +2,24 @@ import { getPosts } from "@/lib/wordpress";
 import BlogList from "@/components/BlogList";
 import Link from "next/link";
 
-// Enable ISR with revalidation every 60 seconds
-export const revalidate = 60;
+export const dynamic = "force-dynamic";
 
 export default async function BlogPage({
   searchParams,
 }: {
-  searchParams?: { page?: string }; // ✅ just an object, not a Promise
+  searchParams?: Promise<{ page?: string }>; // searchParams is a Promise
 }) {
-  // Safely read current page from searchParams, default to 1
-  const currentPage = parseInt(searchParams?.page || "1", 10);
+  // Await searchParams first
+  const params = await searchParams;
+  const currentPage = parseInt(params?.page || "1", 10);
 
-  // Fetch posts (ISR will keep this fresh)
+  // Fetch posts at runtime
   const posts = await getPosts();
   const postsPerPage = 12;
   const totalPages = Math.ceil(posts.length / postsPerPage) || 1;
 
   const validPage = Math.max(1, Math.min(currentPage, totalPages));
 
-  // Slice posts for current page
   const startIndex = (validPage - 1) * postsPerPage;
   const paginatedPosts = posts.slice(startIndex, startIndex + postsPerPage);
 
@@ -34,14 +33,11 @@ export default async function BlogPage({
         <p className="text-gray-500 text-lg text-center">No blog posts found.</p>
       ) : (
         <>
-          {/* Blog Grid */}
           <BlogList initialPosts={paginatedPosts} />
 
-          {/* Pagination */}
           {totalPages > 1 && (
             <div className="mt-12 flex flex-col items-center gap-4">
               <div className="flex items-center gap-2 flex-wrap justify-center">
-                {/* Previous */}
                 <Link
                   href={`/blog?page=${validPage - 1}`}
                   className={`px-4 py-2 rounded-full font-medium text-sm transition-all duration-300 ${
@@ -55,7 +51,6 @@ export default async function BlogPage({
                   &larr; Prev
                 </Link>
 
-                {/* Page numbers */}
                 {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNum) => (
                   <Link
                     key={pageNum}
@@ -72,7 +67,6 @@ export default async function BlogPage({
                   </Link>
                 ))}
 
-                {/* Next */}
                 <Link
                   href={`/blog?page=${validPage + 1}`}
                   className={`px-4 py-2 rounded-full font-medium text-sm transition-all duration-300 ${
