@@ -5,7 +5,7 @@ import { useState, ChangeEvent, FormEvent } from "react";
 import GlassButton from "../Bottons/GlassButton";
 import { MapPin, Mail, Phone, Clock } from "lucide-react";
 
-export default function ContactUs() {
+export default function ContactForm() {
   const [formData, setFormData] = useState({
     name: "",
     email: "",

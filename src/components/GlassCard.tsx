@@ -144,11 +144,18 @@ export default function GlassCard({
               {title}
             </h3>
 
-            {description && (
-              <p className="mb-4 leading-relaxed font-medium text-white/90 drop-shadow-sm line-clamp-4">
-                {description}
-              </p>
-            )}
+{description && (
+  typeof description === "string" ? (
+    <p className="mb-4 leading-relaxed font-medium text-white/90 drop-shadow-sm line-clamp-4">
+      {description}
+    </p>
+  ) : (
+    <div className="mb-4 leading-relaxed font-medium text-white/90 drop-shadow-sm line-clamp-4">
+      {description}
+    </div>
+  )
+)}
+
 
             {price && (
               <p className="text-lg font-semibold text-white mb-6 drop-shadow-sm">
