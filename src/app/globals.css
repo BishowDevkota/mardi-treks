@@ -47,3 +47,17 @@ html{
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 255, 255, 0.4);
 }
+
+
+
+@layer utilities {
+  @keyframes shine {
+    0% { transform: translateX(-100%); opacity: 0; }
+    20% { opacity: 1; }
+    100% { transform: translateX(100%); opacity: 0; }
+  }
+
+  .animate-shine {
+    animation: shine 1s ease-in-out forwards;
+  }
+}

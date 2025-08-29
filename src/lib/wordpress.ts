@@ -117,3 +117,12 @@ export async function searchPosts(query: string): Promise<Post[]> {
 
   return posts;
 }
+
+export async function getRecentPosts(count: number): Promise<Post[]> {
+  const res = await fetchWithRetry(
+    `${WORDPRESS_API}/posts?_embed&per_page=${count}&orderby=date&order=desc`
+  );
+
+  const data: RawWordPressPost[] = await res.json();
+  return data.map(mapPost);
+}

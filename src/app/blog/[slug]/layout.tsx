@@ -23,7 +23,7 @@ export default async function SinglePostLayout({ children, params }: { children:
       <SubHero siteTitle={siteTitle} backgroundImage={backgroundImage} />
       <Suspense fallback={<div className="container mx-auto px-0 py-4 text-center text-gray-300">Loading content...</div>}>
         <main className="container mx-auto px-0 py-0 flex flex-row">
-          <div className="w-[20%] bg-gray-100">
+          <div className="w-[20%]">
             <BlogLeftSideBar slug={slug} />
           </div>
           <div className="w-[5%]" />
