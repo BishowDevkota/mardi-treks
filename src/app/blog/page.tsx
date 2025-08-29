@@ -1,5 +1,5 @@
 import SubHero from '@/components/SubHeroComponent'
-import BlogPage from '@/components/Test'
+import BlogPage from '@/components/Blog/BlogPage'
 import React from 'react'
 
 const Blog = () => {

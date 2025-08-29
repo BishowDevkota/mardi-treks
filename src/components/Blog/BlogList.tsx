@@ -1,7 +1,7 @@
 "use client";
 
 import { Post } from "@/lib/wordpress";
-import GlassCard from "./GlassCard";
+import GlassCard from "../GlassCard";
 
 interface BlogListProps {
   initialPosts: Post[];
