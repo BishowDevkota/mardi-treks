@@ -1,7 +1,7 @@
 import "@/app/globals.css";
-import BlogLeftSideBar from "@/components/Blog/BlogLeftSideBar";
 import BlogRightSideBar from "@/components/Blog/BlogRightSideBar";
 import SubHero from "@/components/SubHeroComponent";
+import TrekkingSidebar from "@/components/Trekking/TrekkingLeftSideBar";
 import { getPostBySlug } from "@/lib/wordpress";
 import { Suspense } from "react";
 
@@ -24,7 +24,7 @@ export default async function SinglePostLayout({
   const backgroundImage = post?.featuredImage || "/images/sub-hero-bg.jpg";
 
   return (
-    <>
+    <> 
       <SubHero siteTitle={siteTitle} backgroundImage={backgroundImage} />
       <Suspense
         fallback={
@@ -35,15 +35,15 @@ export default async function SinglePostLayout({
       >
         <main className="container mx-auto flex flex-col lg:flex-row gap-6 px-4 lg:px-0 py-6">
           {/* Left Sidebar (hidden on mobile, sticky on lg+) */}
-          <aside className="hidden lg:block w-full lg:w-1/5">
-            <BlogLeftSideBar slug={slug} />
+          <aside className=" lg:block w-full lg:w-1/5">
+            <TrekkingSidebar />
           </aside>
 
           {/* Main Content */}
           <div className="w-full lg:w-3/5">{children}</div>
 
           {/* Right Sidebar */}
-          <aside className="hidden lg:block w-full lg:w-1/5">
+          <aside className="lg:block w-full lg:w-1/5">
             <BlogRightSideBar />
           </aside>
         </main>

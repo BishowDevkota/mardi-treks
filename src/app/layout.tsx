@@ -1,7 +1,10 @@
 // src/app/layout.tsx
 import "./globals.css";
 import Footer from "@/components/Footer";
+import ScrollToTop from "@/components/Home-page/ScrollToTop";
+import WhatsAppButton from "@/components/Home-page/Whatshapp";
 import Navbar from "@/components/Navbar";
+import TrekkingSidebar from "@/components/Trekking/TrekkingLeftSideBar";
 
 
 export const metadata = {
@@ -14,7 +17,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body>
         <Navbar/>
+        {/* <TrekkingSidebar/> */}
         <main className="container mx-0 px-0 py-0">{children}</main>
+        <ScrollToTop />
+        <WhatsAppButton phoneNumber="+977 9864379436" />
         <Footer />
       </body>
     </html>

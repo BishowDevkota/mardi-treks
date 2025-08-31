@@ -17,12 +17,17 @@ export default function SubHero({
 }: SubHeroProps) {
   const [pause, setPause] = useState(false);
 
+  // ✅ make sure we always have a valid string
+  const safeSrc = backgroundImage && backgroundImage.trim() !== "" 
+    ? backgroundImage 
+    : "/images/sub-hero-bg.jpg";
+
   return (
     <section className="relative h-[70vh] w-full overflow-hidden">
       {/* Background */}
       <AnimatePresence>
         <motion.div
-          key={backgroundImage}
+          key={safeSrc}
           initial={{ opacity: 0, scale: 1.05 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 1.05 }}
@@ -30,8 +35,8 @@ export default function SubHero({
           className="absolute inset-0"
         >
           <Image
-            src={backgroundImage}
-            alt={siteTitle}
+            src={safeSrc}
+            alt={siteTitle || "Trekking in Nepal"}
             fill
             className="object-cover object-center"
             priority
@@ -51,16 +56,15 @@ export default function SubHero({
           transition={{ duration: 0.8, ease: "easeOut" }}
           className="text-3xl md:text-5xl font-extrabold text-white drop-shadow-lg mb-2"
         >
-          {siteTitle}
+          {siteTitle || "Trekking in Nepal"}
         </motion.h1>
-
-        {/* Dynamic Breadcrumbs */}
-
 
         {/* Glass Search */}
         <motion.div>
           <GlassSearchIcon />
         </motion.div>
+
+        {/* Breadcrumbs */}
         <motion.div
           initial={{ y: 10, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}

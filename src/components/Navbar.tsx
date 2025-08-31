@@ -1,4 +1,3 @@
-// src/components/Navbar.tsx
 "use client";
 
 import { useState } from "react";
@@ -14,7 +13,7 @@ export default function Navbar() {
   const isActive = (path: string) => {
     const normalizedPathname = pathname.toLowerCase().replace(/\/$/, '');
     const normalizedPath = path.toLowerCase().replace(/\/$/, '');
-    if (path === "/trekking") return normalizedPathname.startsWith("/trekking");
+    if (path === "/trekking") return normalizedPathname.startsWith("/trekking") || normalizedPathname === "/trekking";
     if (path === "/blog") return normalizedPathname.startsWith("/blog");
     return normalizedPathname === normalizedPath;
   };
@@ -70,14 +69,14 @@ export default function Navbar() {
               onMouseEnter={() => setOpenDropdown(true)}
               onMouseLeave={() => setOpenDropdown(false)}
             >
-              <div className="relative px-6 py-3 rounded-2xl flex items-center gap-2 hover:text-white transition-all duration-200 group cursor-pointer">
+              <Link href="/trekking" className="relative px-6 py-3 rounded-2xl flex items-center gap-2 hover:text-white transition-all duration-200 group cursor-pointer">
                 {isActive("/trekking") && <DesktopGlassDrop />}
                 <Mountain size={16} className="relative z-10 group-hover:scale-110 transition-transform" />
                 <span className="relative z-10">Trekking</span>
                 <motion.div animate={{ rotate: openDropdown ? 180 : 0 }} transition={{ duration: 0.2 }} className="relative z-10">
                   <ChevronDown size={14} />
                 </motion.div>
-              </div>
+              </Link>
 
               <AnimatePresence>
                 {openDropdown && (
@@ -91,13 +90,13 @@ export default function Navbar() {
                     <div className="backdrop-blur-xl bg-black/60 border border-white/20 rounded-xl p-3 shadow-lg">
                       <ul className="flex flex-col gap-2 pt-2">
                         <li>
-                          <Link href="/trekking/annapurna" className="block px-4 py-2 rounded hover:bg-white/10 transition-all duration-200">Annapurna Circuit</Link>
+                          <Link href="/trekking/mardi-himal-trek" className="block px-4 py-2 rounded hover:bg-white/10 transition-all duration-200">Mardi Himal Trek</Link>
                         </li>
                         <li>
-                          <Link href="/trekking/everest" className="block px-4 py-2 rounded hover:bg-white/10 transition-all duration-200">Everest Base Camp</Link>
+                          <Link href="/trekking/mardi-himal-trek-from-pokhara" className="block px-4 py-2 rounded hover:bg-white/10 transition-all duration-200">Mardi Himal Trek from Pokhara</Link>
                         </li>
                         <li>
-                          <Link href="/trekking/langtang" className="block px-4 py-2 rounded hover:bg-white/10 transition-all duration-200">Langtang Valley</Link>
+                          <Link href="/trekking/mardi-himal-trek-with-annapurna-base-camp" className="block px-4 py-2 rounded hover:bg-white/10 transition-all duration-200">Mardi Himal Trek with ABC</Link>
                         </li>
                       </ul>
                     </div>
@@ -148,28 +147,31 @@ export default function Navbar() {
           </li>
 
           <li className="relative">
-            <button
-              onClick={() => setOpenDropdown(!openDropdown)}
-              className="flex flex-col items-center relative px-4 py-2 rounded-full"
-            >
+            <div className="flex flex-col items-center relative px-4 py-2 rounded-full">
               {isActive("/trekking") && <GlassDrop />}
-              <Mountain size={20} className="relative z-10" />
-              <span className="relative z-10">Trekking</span>
-            </button>
-            <AnimatePresence>
-              {openDropdown && (
-                <motion.ul
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 10 }}
-                  className="absolute top-full mt-1 left-1/2 -translate-x-1/2 bg-black/60 backdrop-blur-xl border border-white/20 shadow-lg rounded-xl p-3 flex flex-col gap-2 text-sm text-white"
-                >
-                  <li><Link href="/trekking/annapurna" className="hover:text-gray-300">Annapurna</Link></li>
-                  <li><Link href="/trekking/everest" className="hover:text-gray-300">Everest</Link></li>
-                  <li><Link href="/trekking/langtang" className="hover:text-gray-300">Langtang</Link></li>
-                </motion.ul>
-              )}
-            </AnimatePresence>
+              <Link href="/trekking" className="flex flex-col items-center">
+                <Mountain size={20} className="relative z-10" />
+                <span className="relative z-10">Trekking</span>
+              </Link>
+              <button
+                onClick={() => setOpenDropdown(!openDropdown)}
+                className="absolute inset-0 z-20"
+              />
+              <AnimatePresence>
+                {openDropdown && (
+                  <motion.ul
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 10 }}
+                    className="absolute top-full mt-1 left-1/2 -translate-x-1/2 bg-black/60 backdrop-blur-xl border border-white/20 shadow-lg rounded-xl p-3 flex flex-col gap-2 text-sm text-white"
+                  >
+                    <li><Link href="/trekking/mardi-himal-trek" className="hover:text-gray-300">Mardi Himal Trek</Link></li>
+                    <li><Link href="/trekking/mardi-himal-trek-from-pokhara" className="hover:text-gray-300">Mardi Himal Trek from Pokhara</Link></li>
+                    <li><Link href="/trekking/mardi-himal-trek-with-annapurna-base-camp" className="hover:text-gray-300">Mardi Himal Trek with ABC</Link></li>
+                  </motion.ul>
+                )}
+              </AnimatePresence>
+            </div>
           </li>
 
           <li className="relative">

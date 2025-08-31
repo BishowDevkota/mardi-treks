@@ -9,15 +9,21 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@stripe/react-stripe-js": "^3.9.2",
+    "@stripe/stripe-js": "^7.9.0",
+    "cheerio": "^1.1.2",
     "emailjs-com": "^3.2.0",
     "framer-motion": "^12.23.12",
     "lucide-react": "^0.541.0",
+    "micro": "^10.0.1",
     "next": "15.5.0",
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "react-icons": "^5.5.0",
     "sanitize-html": "^2.17.0",
-    "swr": "^2.3.6"
+    "stripe": "^18.5.0",
+    "swr": "^2.3.6",
+    "uuid": "^11.1.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
