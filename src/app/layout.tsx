@@ -4,7 +4,6 @@ import Footer from "@/components/Footer";
 import ScrollToTop from "@/components/Home-page/ScrollToTop";
 import WhatsAppButton from "@/components/Home-page/Whatshapp";
 import Navbar from "@/components/Navbar";
-import TrekkingSidebar from "@/components/Trekking/TrekkingLeftSideBar";
 
 
 export const metadata = {

@@ -3,14 +3,15 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
+import Image from "next/image"; // Import Image from next/image
 
 interface GalleryProps {
-   title?: string;
-   shortDescription?: string;
+  title?: string;
+  shortDescription?: string;
   images: { src: string; alt: string; caption?: string }[];
 }
 
-const GallerySection: React.FC<GalleryProps> = ({ images, title, shortDescription     }) => {
+const GallerySection: React.FC<GalleryProps> = ({ images, title, shortDescription }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -32,19 +33,19 @@ const GallerySection: React.FC<GalleryProps> = ({ images, title, shortDescriptio
 
   return (
     <section className="py-6">
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          className="p-4 mb-4"
-        >
-          <h2 className="text-3xl font-bold text-white text-center tracking-tight">
-            {title}
-          </h2>
-          <p className="text-gray-300 text-center mt-2 max-w-2xl mx-auto">
-            {shortDescription}
-          </p>
-        </motion.div>
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+        className="p-4 mb-4"
+      >
+        <h2 className="text-3xl font-bold text-white text-center tracking-tight">
+          {title}
+        </h2>
+        <p className="text-gray-300 text-center mt-2 max-w-2xl mx-auto">
+          {shortDescription}
+        </p>
+      </motion.div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-6">
         {images.map((img, index) => (
           <motion.figure
@@ -53,10 +54,13 @@ const GallerySection: React.FC<GalleryProps> = ({ images, title, shortDescriptio
             whileHover={{ scale: 1.03 }}
             onClick={() => openLightbox(index)}
           >
-            <img
+            <Image
               src={img.src}
               alt={img.alt}
+              width={400} // Adjust based on your layout needs
+              height={192} // Matches h-48 (48 * 4 = 192px in Tailwind)
               className="w-full h-48 object-cover rounded-xl"
+              priority={index < 3} // Optional: Prioritize first few images for faster LCP
             />
             {img.caption && (
               <figcaption className="absolute bottom-2 left-2 text-white text-sm bg-black/40 px-2 py-1 rounded">
@@ -80,14 +84,14 @@ const GallerySection: React.FC<GalleryProps> = ({ images, title, shortDescriptio
               className="absolute top-6 right-6 text-white w-10 h-10 cursor-pointer"
               onClick={closeLightbox}
             />
-            <motion.img
+            <Image
               key={images[currentIndex].src}
               src={images[currentIndex].src}
               alt={images[currentIndex].alt}
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.8 }}
+              width={1200} // Adjust based on max-w-[90vw]
+              height={720} // Adjust based on max-h-[80vh]
               className="max-h-[80vh] max-w-[90vw] rounded-lg shadow-2xl object-contain"
+              priority // Prioritize lightbox image for faster loading
             />
 
             {/* Navigation Arrows */}
@@ -103,10 +107,12 @@ const GallerySection: React.FC<GalleryProps> = ({ images, title, shortDescriptio
             {/* Thumbnails */}
             <div className="absolute bottom-6 flex gap-2 overflow-x-auto max-w-[90vw] px-2">
               {images.map((img, idx) => (
-                <img
+                <Image
                   key={idx}
                   src={img.src}
                   alt={img.alt}
+                  width={64} // Matches w-16 (16 * 4 = 64px in Tailwind)
+                  height={64} // Matches h-16
                   className={`h-16 w-16 object-cover rounded cursor-pointer border-2 ${
                     idx === currentIndex ? "border-white" : "border-transparent"
                   }`}

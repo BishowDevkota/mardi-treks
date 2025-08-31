@@ -54,7 +54,7 @@ const IncludeExclude: React.FC<IncludeExcludeProps> = ({ title, shortInfo, inclu
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent translate-x-[-100%] group-hover/card:translate-x-[100%] transition-transform duration-1000 ease-in-out pointer-events-none"></div>
 
           <div className="relative z-10">
-            <h3 className="text-xl font-semibold text-white mb-4">What's Included</h3>
+            <h3 className="text-xl font-semibold text-white mb-4">What&apos;s Included</h3>
             <ul className="list-disc list-inside space-y-2 text-gray-300">
               <AnimatePresence>
                 {included.map((point, index) => (
@@ -95,7 +95,7 @@ const IncludeExclude: React.FC<IncludeExcludeProps> = ({ title, shortInfo, inclu
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent translate-x-[-100%] group-hover/card:translate-x-[100%] transition-transform duration-1000 ease-in-out pointer-events-none"></div>
 
           <div className="relative z-10">
-            <h3 className="text-xl font-semibold text-white mb-4">What's Excluded</h3>
+            <h3 className="text-xl font-semibold text-white mb-4">What&apos;s Excluded</h3>
             <ul className="list-disc list-inside space-y-2 text-gray-300">
               <AnimatePresence>
                 {excluded.map((point, index) => (

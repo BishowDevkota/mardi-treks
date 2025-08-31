@@ -15,7 +15,6 @@ export default function SubHero({
   siteTitle,
   backgroundImage = "/images/sub-hero-bg.jpg",
 }: SubHeroProps) {
-  const [pause, setPause] = useState(false);
 
   // ✅ make sure we always have a valid string
   const safeSrc = backgroundImage && backgroundImage.trim() !== "" 

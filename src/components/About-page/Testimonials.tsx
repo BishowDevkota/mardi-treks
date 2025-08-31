@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Star } from "lucide-react";
+import Image from "next/image"; // Import the Image component
 
 const testimonials = [
   {
@@ -42,10 +43,10 @@ export default function Testimonials() {
           viewport={{ once: true }}
           className="mb-16"
         >
-          <h2 className="text-4xl md:text-6xl font-bold  mb-6 font-serif tracking-tight">
+          <h2 className="text-4xl md:text-6xl font-bold mb-6 font-serif tracking-tight">
             What Our Clients Say
           </h2>
-          <p className="text-xl  max-w-3xl mx-auto leading-relaxed">
+          <p className="text-xl max-w-3xl mx-auto leading-relaxed">
             Hear directly from the adventurers who explored the Himalayas with us.
           </p>
         </motion.div>
@@ -66,10 +67,13 @@ export default function Testimonials() {
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -skew-x-12 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 ease-in-out"></div>
 
                 <div className="relative z-10 flex flex-col items-center justify-center">
-                  <img
+                  <Image
                     src={testimonial.image}
                     alt={testimonial.name}
+                    width={80} // Specify width (in pixels)
+                    height={80} // Specify height (in pixels)
                     className="w-20 h-20 rounded-full mb-4 border-2 border-white/30 object-cover"
+                    priority={i === 0} // Optional: Prioritize loading for the first image
                   />
                   <h3 className="text-2xl font-semibold text-white mb-1">
                     {testimonial.name}
