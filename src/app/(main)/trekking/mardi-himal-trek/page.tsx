@@ -56,7 +56,19 @@ interface OverviewItem {
 
   return (
     <>
-    <OverviewSection title="Overview for Mardi Himal Trek" info={OverviewInfo} />
+<OverviewSection
+  title="Overview for Mardi Himal Trek"
+  shortDescription="Hello"
+  info={[
+    { heading: 'Rapid Booking', description: 'Secure your adventure spot quickly.' },
+    { heading: 'Safe Exploration', description: 'Explore with confidence and safety.' },
+    { heading: 'Progress Updates', description: 'Get live updates on your adventure.' },
+    { heading: 'Group Expeditions', description: 'Join others for a thrilling group adventure.' },
+    { heading: 'Personalized Trips', description: 'Create a trip that matches your style.' },
+    { heading: 'hi', description: 'Sync adventure details across devices.' }
+  ]}
+/>
+
     <GlassSeparator />
     <ItinerarySection
   title="Langtang Valley Trek Itinerary"

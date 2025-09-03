@@ -1,5 +1,5 @@
 // src/app/layout.tsx
-import "./globals.css";
+import "@/app/globals.css";
 import Footer from "@/components/Footer";
 import ScrollToTop from "@/components/Home-page/ScrollToTop";
 import WhatsAppButton from "@/components/Home-page/Whatshapp";

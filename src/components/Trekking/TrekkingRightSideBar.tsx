@@ -1,5 +1,3 @@
-
-// components/Trekking/TrekkingRightSideBar.tsx
 "use client";
 
 import React, { useState, useEffect } from 'react';
@@ -18,7 +16,7 @@ interface TrekPricing {
   [key: string]: PricingTier[];
 }
 
-// Interface for booking data
+
 export interface BookingData {
   trekKey: string;
   trekName: string;
@@ -28,6 +26,10 @@ export interface BookingData {
   originalPrice: number;
   discountedPrice: number;
   totalOriginalPrice: number;
+  paymentStatus: string;
+  status: string;
+  trekkingDays: number;
+  returnDate:  Date; 
 }
 
 const TrekkingRightSideBar: React.FC = () => {
@@ -36,6 +38,17 @@ const TrekkingRightSideBar: React.FC = () => {
   const [persons, setPersons] = useState(1);
   const [pricingData, setPricingData] = useState<TrekPricing | null>(null);
   const [loading, setLoading] = useState(true);
+  const [showForm, setShowForm] = useState(false);
+  const [processingPayment, setProcessingPayment] = useState(false);
+
+  // Traveler form state
+  const [formData, setFormData] = useState({
+    fullName: '',
+    email: '',
+    country: '',
+    phone: '',
+    departureDate: ''
+  });
 
   // Fetch pricing data
   useEffect(() => {
@@ -54,7 +67,6 @@ const TrekkingRightSideBar: React.FC = () => {
     fetchPricing();
   }, []);
 
-  // Extract trek name from pathname
   const getCurrentTrekKey = (): string => {
     const pathSegments = pathname.split('/');
     const trekName = pathSegments[pathSegments.length - 1];
@@ -65,7 +77,6 @@ const TrekkingRightSideBar: React.FC = () => {
 
   const currentTrekKey = getCurrentTrekKey();
 
-  // Get current pricing based on trek and person count
   const getCurrentPrice = (): number => {
     if (!pricingData) return 0;
     const pricing = pricingData[currentTrekKey] || pricingData["mardi-himal-trek"];
@@ -78,7 +89,6 @@ const TrekkingRightSideBar: React.FC = () => {
   const totalOriginalPrice = originalPricePerPerson * persons;
   const totalDiscountedPrice = discountedPricePerPerson * persons;
 
-  // Get all pricing tiers for display
   const getAllPricingTiers = () => {
     if (!pricingData) return [];
     const pricing = pricingData[currentTrekKey] || pricingData["mardi-himal-trek"];
@@ -104,23 +114,44 @@ const TrekkingRightSideBar: React.FC = () => {
       .join(' ');
   };
 
-  // Function to get booking data
   const getBookingData = (): BookingData => {
-    return {
-      trekKey: currentTrekKey,
-      trekName: getTrekDisplayName(),
-      persons,
-      pricePerPerson: originalPricePerPerson,
-      totalPrice: totalDiscountedPrice,
-      originalPrice: originalPricePerPerson,
-      discountedPrice: discountedPricePerPerson,
-      totalOriginalPrice
-    };
+  return {
+    trekKey: currentTrekKey,
+    trekName: getTrekDisplayName(),
+    persons,
+    pricePerPerson: originalPricePerPerson,
+    totalPrice: totalDiscountedPrice,
+    originalPrice: originalPricePerPerson,
+    discountedPrice: discountedPricePerPerson,
+    totalOriginalPrice,
+    paymentStatus: "Pending",
+    status: "Pending",
+    trekkingDays: 0,
+    returnDate: new Date(),
+     // Added status
+  };
+};
+
+const handleBookNow = () => {
+    setShowForm(true);
   };
 
-  // Handler for initiating booking and redirect
-  const handleBookNow = async () => {
-    const bookingData = getBookingData();
+  const isFormValid = (): boolean => {
+    return (
+      formData.fullName.trim() !== '' &&
+      formData.email.trim() !== '' &&
+      formData.country.trim() !== '' &&
+      formData.phone.trim() !== '' &&
+      formData.departureDate.trim() !== ''
+    );
+  };
+
+  const handlePayNow = async () => {
+    if (!isFormValid()) return;
+
+    const bookingData = { ...getBookingData(), ...formData };
+    setProcessingPayment(true);
+
     try {
       const response = await fetch('/api/bookings', {
         method: 'POST',
@@ -133,10 +164,12 @@ const TrekkingRightSideBar: React.FC = () => {
         router.push(`/booking/${bookingId}`);
       } else {
         alert('Failed to create booking');
+        setProcessingPayment(false);
       }
     } catch (error) {
       console.error('Error creating booking:', error);
       alert('Error creating booking');
+      setProcessingPayment(false);
     }
   };
 
@@ -146,54 +179,50 @@ const TrekkingRightSideBar: React.FC = () => {
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 1.2, ease: "easeInOut" }}
       className="
-        relative overflow-hidden sticky top-[100px] max-h-[calc(100vh-150px)]
+        relative  sticky top-[100px] 
         w-[90%] left-[10%] bg-black/50 backdrop-blur-xl
         border border-gray-700/50 rounded-2xl
         shadow-[0_8px_32px_0_rgba(0,0,0,0.3)]
         group transition-all duration-500 hover:scale-105
-        overflow-y-auto custom-scrollbar
+        overflow-hidden custom-scrollbar
       "
     >
-      {/* Shimmer Overlay on container */}
+      {/* Shimmer Overlay */}
       <div className="absolute inset-0 rounded-2xl pointer-events-none">
         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 ease-in-out"></div>
       </div>
 
-      {/* Top right discount badge */}
-      <motion.div
+      {/* Discount badge */}
+      {showForm ?  null: <motion.div
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.5, delay: 0.2 }}
-        className="absolute top-2 right-2 bg-black/70 backdrop-blur-md text-white text-xs font-bold px-2 py-1 rounded-full shadow-md"
+        className="absolute right-0 bg-black/70 backdrop-blur-md text-white text-xs font-bold px-2 py-1 rounded-full shadow-md"
       >
         <span>
           10% OFF (
           <span className="line-through">${totalOriginalPrice}</span>{' '}
           <span className="text-gray-100 font-bold">${totalDiscountedPrice}</span>)
         </span>
-      </motion.div>
+      </motion.div>}
 
-      {/* Simplified header */}
+      {/* Header */}
       <div className="relative z-10 p-4 border-b border-gray-700/50">
-        <h3 className="text-lg font-bold text-white tracking-tight">Price Calculator</h3>
-        <div className="flex items-center gap-2 text-sm text-gray-100 mt-1">
-          <Mountain className="w-4 h-4 flex-shrink-0" />
-          <span className="truncate font-medium">{getTrekDisplayName()}</span>
-        </div>
+        <h3 className="text-lg top-2  top-4 relative flex items-center justify-center font-bold text-white tracking-tight">{showForm ? "Traveler's Information" : "Price Calculator"}</h3>
+
       </div>
 
       <div className="relative z-10 p-4 space-y-4">
         {loading ? (
           <div className="text-center text-gray-100">Loading pricing...</div>
-        ) : (
+        ) : !showForm ? (
           <>
-            {/* Compact Person Counter */}
+            {/* Person counter */}
             <div className="space-y-2">
               <div className="flex items-center justify-center gap-1.5 text-gray-100">
                 <Users className="w-4 h-4 text-gray-200" />
                 <h4 className="font-semibold text-xs uppercase tracking-wide">Group Size</h4>
               </div>
-              
               <div className="flex items-center justify-center gap-2">
                 <motion.button
                   onClick={() => updatePersons(persons - 1)}
@@ -207,7 +236,6 @@ const TrekkingRightSideBar: React.FC = () => {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent translate-x-[-100%] group-hover/minus:translate-x-[100%] transition-transform duration-1000 ease-in-out pointer-events-none"></div>
                   <Minus className="w-4 h-4 relative z-10" />
                 </motion.button>
                 
@@ -225,13 +253,12 @@ const TrekkingRightSideBar: React.FC = () => {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent translate-x-[-100%] group-hover/plus:translate-x-[100%] transition-transform duration-1000 ease-in-out pointer-events-none"></div>
                   <Plus className="w-4 h-4 relative z-10" />
                 </motion.button>
               </div>
             </div>
 
-            {/* Price per Person */}
+            {/* Price info */}
             <div className="text-center">
               <div className="flex items-center justify-center gap-1.5">
                 <span className="text-gray-300 text-xs font-medium uppercase tracking-wide">Price per Person:</span>
@@ -240,14 +267,13 @@ const TrekkingRightSideBar: React.FC = () => {
               </div>
             </div>
 
-            {/* Combined Total Price and Savings */}
+            {/* Total and Savings */}
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.3 }}
               className="bg-gray-800/30 rounded-lg p-2 border border-gray-700/50 relative overflow-hidden"
             >
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 ease-in-out pointer-events-none"></div>
               <div className="relative text-center">
                 <div className="flex items-center justify-center gap-1.5">
                   <span className="text-gray-300 text-xs font-medium uppercase tracking-wide">Total:</span>
@@ -259,7 +285,7 @@ const TrekkingRightSideBar: React.FC = () => {
               </div>
             </motion.div>
 
-            {/* Compact Price Tiers */}
+            {/* Price tiers */}
             <div className="space-y-2">
               <div className="text-center text-gray-200 font-semibold text-xs uppercase tracking-wide">
                 Group Pricing
@@ -289,7 +315,6 @@ const TrekkingRightSideBar: React.FC = () => {
                     `}>
                       {tier.label}
                     </span>
-                    
                     <div className="flex items-center gap-1 relative z-10">
                       <span className="text-gray-400 line-through text-xs">${tier.price}</span>
                       <span className={`
@@ -307,43 +332,93 @@ const TrekkingRightSideBar: React.FC = () => {
               </div>
             </div>
 
-            {/* Compact Book Now Button */}
-            <div>
+            {/* Book Now */}
+            {/* <div>
               <motion.button
                 onClick={handleBookNow}
                 className="
                   group/button relative w-full bg-gray-700/50 hover:bg-gray-600/50 
-                  text-white font-bold py-2.5 px-3 rounded-lg 
-                  transition-all duration-300
-                  disabled:cursor-not-allowed disabled:bg-gray-800/30
+                  text-white font-bold py-2.5 px-3 rounded-lg transition-all duration-300
                 "
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent translate-x-[-100%] group-hover/button:translate-x-[100%] transition-transform duration-1000 ease-in-out pointer-events-none"></div>
-                
                 <div className="relative flex items-center justify-center gap-1.5">
                   <Mountain className="w-4 h-4" />
                   <span className="font-bold tracking-wide text-sm">BOOK NOW</span>
                 </div>
               </motion.button>
-              
-              <div className="mt-2 flex items-center justify-center gap-2 text-xs text-gray-300">
-                <div className="flex items-center gap-1">
-                  <div className="w-1 h-1 bg-gray-100 rounded-full animate-pulse"></div>
-                  <span>Instant</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <div className="w-1 h-1 bg-gray-200 rounded-full animate-pulse" style={{animationDelay: '0.5s'}}></div>
-                  <span>Secure</span>
-                </div>
+            </div> */}
+
+            <motion.button
+              onClick={handleBookNow}
+              className={`
+                w-full bg-green-600 hover:bg-green-500 text-white font-bold py-2.5 px-3 rounded-lg transition-all duration-300
+                disabled:opacity-50 disabled:cursor-not-allowed
+              `}
+              whileHover={{ scale: isFormValid() ? 1.02 : 1 }}
+              whileTap={{ scale: isFormValid() ? 0.98 : 1 }}
+            >
+              <div className="relative flex items-center justify-center gap-1.5">
+                <Mountain className="w-4 h-4" />
+                <span className="font-bold tracking-wide text-sm">BOOK NOW</span>
+              </div>
+            </motion.button>
+          </>
+        ) : (
+          // Traveler Info Form
+          <div className="space-y-3">
+            {[
+              { label: 'Full Name', name: 'fullName', type: 'text', placeholder: 'Full Name' },
+              { label: 'Email', name: 'email', type: 'email', placeholder: 'Email' },
+              { label: 'Country', name: 'country', type: 'text', placeholder: 'Country' },
+              { label: 'Phone Number', name: 'phone', type: 'text', placeholder: 'Phone Number with country code' },
+              { label: 'Trek Departure Date', name: 'departureDate', type: 'date', placeholder: 'Trek Departure Date' },
+            ].map((field) => (
+              <div key={field.name} className="flex flex-col">
+                {field.name === 'departureDate' && (
+                  <label className="text-gray-300 text-xs font-medium mb-1">{field.label}</label>
+                )}
+                <input
+                  type={field.type}
+                  name={field.name}
+                  placeholder={field.placeholder}
+                  value={formData[field.name as keyof typeof formData]}
+                  onChange={(e) =>
+                    setFormData({ ...formData, [field.name]: e.target.value })
+                  }
+                  className="p-2 rounded-md bg-gray-900/40 border border-gray-700/50 text-white placeholder-gray-400 focus:outline-none focus:border-green-500"
+                  required
+                />
+              </div>
+            ))}
+
+            {/* Payment summary */}
+            <div className="bg-gray-800/30 rounded-lg p-2 border border-gray-700/50 text-center">
+              <div className="text-gray-100 font-semibold text-sm">
+                Paying for {persons} {persons > 1 ? 'persons' : 'person'}: ${totalDiscountedPrice} <br />
+                You save: ${totalOriginalPrice - totalDiscountedPrice}
               </div>
             </div>
-          </>
+
+            {/* Pay Now */}
+            <motion.button
+              onClick={handlePayNow}
+              disabled={!isFormValid() || processingPayment}
+              className={`
+                w-full bg-green-600 hover:bg-green-500 text-white font-bold py-2.5 px-3 rounded-lg transition-all duration-300
+                 disabled:cursor-not-allowed
+              `}
+              whileHover={{ scale: isFormValid() ? 1.02 : 1 }}
+              whileTap={{ scale: isFormValid() ? 0.98 : 1 }}
+            >
+              {processingPayment ? 'Processing...' : 'PAY NOW'}
+            </motion.button>
+          </div>
         )}
       </div>
 
-      {/* Compact decorative bottom accent */}
+      {/* Bottom accent */}
       <div className="h-0.5 bg-gradient-to-r from-gray-600 via-gray-500 to-gray-600"></div>
     </motion.div>
   );
