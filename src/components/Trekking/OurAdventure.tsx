@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 
 import GlassCard from "../GlassCard";
 
-const adventures = [
+const trekkings = [
   {
     id: 1,
     title: "Mountain Trekking",
@@ -73,23 +73,23 @@ export default function OurAdventure() {
 
         {/* Adventure Cards Grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
-          {adventures.map((adventure, index) => (
+          {trekkings.map((trekking, index) => (
             <motion.div
-              key={adventure.id}
+              key={trekking.id}
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: index * 0.2, ease: "easeOut" }}
               viewport={{ once: true }}
             >
               <GlassCard
-                title={adventure.title}
-                description={adventure.description}
-                image={adventure.image}
-                topLeft={adventure.topLeft}
-                topRight={adventure.topRight}
-                price={adventure.price}
-                ctaLabel={adventure.buttonLabel}
-                ctaLink={adventure.buttonLink}
+                title={trekking.title}
+                description={trekking.description}
+                image={trekking.image}
+                topLeft={trekking.topLeft}
+                topRight={trekking.topRight}
+                price={trekking.price}
+                ctaLabel={trekking.buttonLabel}
+                ctaLink={trekking.buttonLink}
               />
 
 

@@ -54,13 +54,12 @@ const GallerySection: React.FC<GalleryProps> = ({ images, title, shortDescriptio
             whileHover={{ scale: 1.03 }}
             onClick={() => openLightbox(index)}
           >
-            <Image
+            <img
               src={img.src}
               alt={img.alt}
               width={400} // Adjust based on your layout needs
               height={192} // Matches h-48 (48 * 4 = 192px in Tailwind)
               className="w-full h-48 object-cover rounded-xl"
-              priority={index < 3} // Optional: Prioritize first few images for faster LCP
             />
             {img.caption && (
               <figcaption className="absolute bottom-2 left-2 text-white text-sm bg-black/40 px-2 py-1 rounded">
@@ -84,14 +83,13 @@ const GallerySection: React.FC<GalleryProps> = ({ images, title, shortDescriptio
               className="absolute top-6 right-6 text-white w-10 h-10 cursor-pointer"
               onClick={closeLightbox}
             />
-            <Image
+            <img
               key={images[currentIndex].src}
               src={images[currentIndex].src}
               alt={images[currentIndex].alt}
               width={1200} // Adjust based on max-w-[90vw]
               height={720} // Adjust based on max-h-[80vh]
               className="max-h-[80vh] max-w-[90vw] rounded-lg shadow-2xl object-contain"
-              priority // Prioritize lightbox image for faster loading
             />
 
             {/* Navigation Arrows */}
@@ -107,7 +105,7 @@ const GallerySection: React.FC<GalleryProps> = ({ images, title, shortDescriptio
             {/* Thumbnails */}
             <div className="absolute bottom-6 flex gap-2 overflow-x-auto max-w-[90vw] px-2">
               {images.map((img, idx) => (
-                <Image
+                <img
                   key={idx}
                   src={img.src}
                   alt={img.alt}

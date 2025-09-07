@@ -1,12 +1,11 @@
 "use client";
 
 import { motion } from "framer-motion";
-import Image from "next/image";
 import GlassButton from "./Bottons/GlassButton";
 
 interface AdventureCardProps {
   title: string;
-  description?: string|React.ReactNode;
+  description?: string | React.ReactNode;
   image?: string;
   price?: number;
   topLeft?: string | React.ReactNode;
@@ -49,17 +48,17 @@ export default function GlassCard({
         {/* Background Image */}
         {image && (
           <div className="absolute inset-0">
-            <Image
+            <img
               src={image}
               alt={title}
-              fill
-              className="object-cover opacity-70 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl"
+              className="w-full h-full object-cover opacity-70 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl"
             />
             {/* Gradient Overlay */}
             <div
               className="absolute inset-0 rounded-3xl"
               style={{
-                background: `linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0.05) 100%)`,
+                background:
+                  "linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0.05) 100%)",
               }}
             ></div>
           </div>
@@ -73,28 +72,25 @@ export default function GlassCard({
           {/* Top Badges */}
           {(topLeft || topRight) && (
             <div className="flex justify-between items-start mb-6">
-              {/* Glass Blur Badge (like GlassButton) */}
+              {/* Glass Blur Badge */}
               {topLeft && (
                 <span className="relative inline-flex items-center justify-center px-5 py-1.5 
                                  rounded-full font-medium text-white text-sm
                                  bg-white/10 backdrop-blur-md border border-white/20
                                  shadow-[0_8px_32px_0_rgba(0,0,0,0.3)]
                                  overflow-hidden group/topLeft transition-all duration-500">
-                  {/* Glow Border */}
                   <span className="absolute inset-0 rounded-full border border-white/30 opacity-50 
                                    group-hover/topLeft:opacity-100 transition-opacity duration-500 pointer-events-none"></span>
-                  {/* Shiny reflection */}
                   <span className="absolute w-[120%] h-[200%] bg-gradient-to-r from-transparent via-white/40 to-transparent 
                                    rotate-45 -translate-x-[150%] group-hover/topLeft:translate-x-[150%] 
                                    transition-transform duration-1000 ease-in-out pointer-events-none"></span>
-                  {/* Inner Glow */}
                   <div className="absolute inset-1 bg-white/10 rounded-full blur-sm 
                                   group-hover/topLeft:blur-md transition-all duration-300 pointer-events-none"></div>
                   <span className="relative z-10">{topLeft}</span>
                 </span>
               )}
 
-              {/* Unique Animated Badge (comet pulse) */}
+              {/* Unique Animated Badge */}
               {topRight && (
                 <motion.span
                   className="relative px-5 py-1.5 rounded-full text-sm font-bold text-white overflow-hidden"
@@ -118,7 +114,6 @@ export default function GlassCard({
                   }}
                 >
                   {topRight}
-                  {/* Orbiting glowing comet */}
                   <motion.span
                     className="absolute -top-2 left-1 w-2 h-2 bg-yellow-400 rounded-full blur-sm"
                     animate={{
@@ -144,18 +139,17 @@ export default function GlassCard({
               {title}
             </h3>
 
-{description && (
-  typeof description === "string" ? (
-    <p className="mb-4 leading-relaxed font-medium text-white/90 drop-shadow-sm line-clamp-4">
-      {description}
-    </p>
-  ) : (
-    <div className="mb-4 leading-relaxed font-medium text-white/90 drop-shadow-sm line-clamp-4">
-      {description}
-    </div>
-  )
-)}
-
+            {description && (
+              typeof description === "string" ? (
+                <p className="mb-4 leading-relaxed font-medium text-white/90 drop-shadow-sm line-clamp-4">
+                  {description}
+                </p>
+              ) : (
+                <div className="mb-4 leading-relaxed font-medium text-white/90 drop-shadow-sm line-clamp-4">
+                  {description}
+                </div>
+              )
+            )}
 
             {price && (
               <p className="text-lg font-semibold text-white mb-6 drop-shadow-sm">
@@ -175,7 +169,6 @@ export default function GlassCard({
               </p>
             )}
 
-            {/* CTA Button */}
             {ctaLabel && ctaLink && (
               <GlassButton label={ctaLabel} href={ctaLink} />
             )}
